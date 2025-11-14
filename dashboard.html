@@ -259,387 +259,460 @@
     ================================================================
     -->
     <script>
-        // --- 1. MOCK DATA ---
-        // In a real app, this data would come from a database or API.
-        const mockSignals = [
-            {
-                pair: "BTC / USDT",
-                market: "Crypto",
-                status: "Active", // Active, TP Hit, SL Hit
-                signal: "BUY", // BUY, SELL
-                entry: "60,000",
-                sl: "58,000",
-                tp: "65,000",
-                posted: "2 hours ago",
-                strategy: "TrendRider V2"
-            },
-            {
-                pair: "BANKNIFTY",
-                market: "Indian Stocks",
-                status: "Active",
-                signal: "SELL",
-                entry: "48,500",
-                sl: "48,700",
-                tp: "48,000",
-                posted: "45 minutes ago",
-                strategy: "Intraday Scalp"
-            },
-            {
-                pair: "XAU / USD (GOLD)",
-                market: "Gold",
-                status: "TP Hit",
-                signal: "BUY",
-                entry: "2300",
-                sl: "2290",
-                tp: "2320",
-                posted: "1 day ago",
-                strategy: "Breakout"
-            },
-            {
-                pair: "CRUDE OIL (WTI)",
-                market: "Crude Oil",
-                status: "SL Hit",
-                signal: "SELL",
-                entry: "80.00",
-                sl: "81.00",
-                tp: "78.00",
-                posted: "3 days ago",
-                strategy: "Mean Reversion"
-            },
-            {
-                pair: "EUR / USD",
-                market: "Currency",
-                status: "Active",
-                signal: "BUY",
-                entry: "1.0850",
-                sl: "1.0800",
-                tp: "1.0950",
-                posted: "5 hours ago",
-                strategy: "TrendRider V2"
-            }
-        ];
+        // Wait for the full document to be loaded before running any script
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- 1. MOCK DATA ---
+            // In a real app, this data would come from a database or API.
+            const mockSignals = [
+                {
+                    pair: "BTC / USDT",
+                    market: "Crypto",
+                    status: "Active", // Active, TP Hit, SL Hit
+                    signal: "BUY", // BUY, SELL
+                    entry: "Loading...", // This will be replaced by the API
+                    sl: "58,000",
+                    tp: "65,000",
+                    posted: "Connecting...",
+                    strategy: "Live Price"
+                },
+                {
+                    pair: "BANKNIFTY",
+                    market: "Indian Stocks",
+                    status: "Active",
+                    signal: "SELL",
+                    entry: "48,500",
+                    sl: "48,700",
+                    tp: "48,000",
+                    posted: "45 minutes ago",
+                    strategy: "Intraday Scalp"
+                },
+                {
+                    pair: "XAU / USD (GOLD)",
+                    market: "Gold",
+                    status: "TP Hit",
+                    signal: "BUY",
+                    entry: "$2300",
+                    sl: "$2290",
+                    tp: "$2320",
+                    posted: "1 day ago",
+                    strategy: "TrendRider V2"
+                },
+                {
+                    pair: "CRUDE OIL (WTI)",
+                    market: "Crude Oil",
+                    status: "SL Hit",
+                    signal: "SELL",
+                    entry: "$80.00",
+                    sl: "$81.00",
+                    tp: "$78.00",
+                    posted: "3 days ago",
+                    strategy: "Support/Resist"
+                }
+            ];
 
-        // Mock data for the news ticker
-        const mockNews = [
-            { category: "Crypto", headline: "Bitcoin tests $61,000 resistance level as market sentiment shifts." },
-            { category: "Indian Stocks", headline: "NIFTY 50 opens flat, Bank Nifty shows bearish divergence." },
-            { category: "Gold", headline: "XAU/USD rallies on weaker-than-expected US inflation data." },
-            { category: "Crude Oil", headline: "WTI Crude Oil inventories rise, putting pressure on prices." },
-            { category: "Currency", headline: "ECB holds rates steady, EUR/USD remains in tight range." }
-        ];
+            const mockNews = [
+                "<span><strong>GOLD:</strong> Price hits 5-day high as dollar rally stalls.</span>",
+                "<span><strong>CRYPTO:</strong> Market sentiment cautious ahead of regulator speech.</span>",
+                "<span><strong>BANKNIFTY:</strong> Volatility expected to increase near options expiry.</span>",
+                "<span><strong>OIL:</strong> Crude inventories drop more than expected, boosting WTI.</span>",
+                "<span><strong>USD/JPY:</strong> Pair tests key 148.50 resistance level.</span>"
+            ];
 
-        // --- 2. DOM ELEMENTS ---
-        const signalContainer = document.getElementById('signal-feed-container');
-        const navLinksContainer = document.getElementById('nav-links-container');
-        const mainHeaderTitle = document.getElementById('main-header-title');
-        const clockElement = document.getElementById('clock');
-        const timezoneSelect = document.getElementById('timezone-select');
-        const newsTickerContent = document.getElementById('news-ticker-content');
-        
-        // --- New View & Calculator Elements ---
-        const viewSignals = document.getElementById('view-signals');
-        const viewCalculator = document.getElementById('view-calculator');
-        const calculateBtn = document.getElementById('calculate-trade-btn');
-        const calcResultsContainer = document.getElementById('calc-results-container');
-        const calcEntry = document.getElementById('calc-entry');
-        const calcExit = document.getElementById('calc-exit');
-        const calcSL = document.getElementById('calc-sl');
-        const calcQuantity = document.getElementById('calc-quantity');
-        const calcFees = document.getElementById('calc-fees');
+            // --- 2. DOM ELEMENTS ---
+            const signalContainer = document.getElementById('signal-feed-container');
+            const navLinksContainer = document.getElementById('nav-links-container');
+            const mainHeaderTitle = document.getElementById('main-header-title');
+            const clockElement = document.getElementById('clock');
+            const timezoneSelect = document.getElementById('timezone-select');
+            const newsTickerContent = document.getElementById('news-ticker-content');
+            
+            // --- New View & Calculator Elements ---
+            const viewSignals = document.getElementById('view-signals');
+            const viewCalculator = document.getElementById('view-calculator');
+            const calculateBtn = document.getElementById('calculate-trade-btn');
+            const calcResultsContainer = document.getElementById('calc-results-container');
+            const calcEntry = document.getElementById('calc-entry');
+            const calcExit = document.getElementById('calc-exit');
+            const calcSL = document.getElementById('calc-sl');
+            const calcQuantity = document.getElementById('calc-quantity');
+            const calcFees = document.getElementById('calc-fees');
 
-        let clockInterval; // To store the interval
+            let clockInterval; // To store the interval
 
-        // --- 3. CLOCK FUNCTIONALITY ---
-
-        /**
-         * Updates the clock element with the current time in the selected timezone.
-         */
-        function updateClock() {
-            const selectedTimezone = timezoneSelect.value;
-            let date = new Date();
-            let timeString;
-
-            try {
+            // --- 3. CLOCK FUNCTIONALITY ---
+            /**
+             * Updates the clock display based on the selected timezone.
+             */
+            function updateClock() {
+                const selectedTimezone = timezoneSelect.value;
+                const now = new Date();
+                
+                let timeString;
+                
                 if (selectedTimezone === 'local') {
-                    timeString = date.toLocaleTimeString('en-GB');
+                    timeString = now.toLocaleTimeString('en-US', { hour12: false });
                 } else {
-                    timeString = date.toLocaleTimeString('en-GB', { timeZone: selectedTimezone, hour12: false });
+                    timeString = now.toLocaleTimeString('en-US', { hour12: false, timeZone: selectedTimezone });
                 }
+                
                 clockElement.textContent = timeString;
-            } catch (error) {
-                // Fallback for invalid timezone
-                clockElement.textContent = date.toLocaleTimeString('en-GB');
-                console.error("Invalid timezone selected:", selectedTimezone);
             }
-        }
 
-        /**
-         * Starts the clock interval.
-         */
-        function startClock() {
-            // Clear any existing interval
-            if (clockInterval) {
-                clearInterval(clockInterval);
+            /**
+             * Starts or restarts the clock interval.
+             */
+            function startClock() {
+                // Clear any existing interval
+                if (clockInterval) {
+                    clearInterval(clockInterval);
+                }
+                // Update the clock immediately
+                updateClock();
+                // Start a new interval to update every second
+                clockInterval = setInterval(updateClock, 1000);
             }
-            // Update the clock immediately
-            updateClock();
-            // Start a new interval to update it every second
-            clockInterval = setInterval(updateClock, 1000);
-        }
 
-        // --- 4. NEWS TICKER FUNCTIONALITY ---
+            // --- 4. NEWS TICKER FUNCTIONALITY ---
 
-        /**
-         * Renders the mock news items into the scrolling ticker.
-         */
-        function renderNewsTicker() {
-            let newsHTML = '';
-            mockNews.forEach(item => {
-                newsHTML += `
-                    <span>
-                        <strong>${item.category}:</strong> ${item.headline}
-                    </span>
-                `;
-            });
+            /**
+             * Renders the news items into the scrolling ticker.
+             */
+            function renderNewsTicker() {
+                let newsHTML = mockNews.join("");
+                // Duplicate the content to ensure a smooth, endless scroll
+                newsTickerContent.innerHTML = newsHTML + newsHTML;
+            }
+
+            // --- 5. RENDER SIGNALS FUNCTION ---
+            /**
+             * Generates the HTML for all signals and injects them into the feed.
+             * @param {Array} signalsToRender - The array of signal objects to render.
+             */
+            function renderSignals(signalsToRender) {
+                // Clear the existing feed
+                signalContainer.innerHTML = "";
+
+                // If no signals, show a message
+                if (signalsToRender.length === 0) {
+                    signalContainer.innerHTML = `<div class="bg-gray-800 rounded-2xl border border-gray-700/50 p-8 text-center">
+                        <h3 class="text-xl font-semibold text-white">No Active Signals</h3>
+                        <p class="text-gray-400 mt-2">No signals match the current filter.</p>
+                    </div>`;
+                    return;
+                }
+                
+                // Loop through each signal and build the HTML card
+                signalsToRender.forEach(signal => {
+                    // Determine colors based on signal type and status
+                    const signalColor = signal.signal === "BUY" ? "text-green-400" : "text-red-400";
+                    
+                    let statusColor, statusText;
+                    switch (signal.status) {
+                        case "Active":
+                            statusColor = "bg-green-500/10 text-green-400";
+                            statusText = "Active";
+                            break;
+                        case "TP Hit":
+                            statusColor = "bg-blue-500/10 text-blue-400";
+                            statusText = "Closed (TP Hit)";
+                            break;
+                        case "SL Hit":
+                            statusColor = "bg-red-500/10 text-red-400";
+                            statusText = "Closed (SL Hit)";
+                            break;
+                        case "Error":
+                            statusColor = "bg-red-500/10 text-red-400";
+                            statusText = "Error";
+                            break;
+                        default:
+                            statusColor = "bg-gray-500/10 text-gray-400";
+                            statusText = signal.status;
+                    }
+
+                    // Card Opacity for closed trades
+                    const cardOpacity = signal.status === "Active" || signal.status === "Error" ? "" : "opacity-70";
+
+                    const cardHTML = `
+                    <div class="bg-gray-800 rounded-2xl border border-gray-700/50 shadow-lg overflow-hidden ${cardOpacity}">
+                        <div class="p-6">
+                            <div class="flex justify-between items-center">
+                                <h2 class="text-2xl font-bold text-white">${signal.pair}</h2>
+                                <span class="text-sm font-medium ${statusColor} py-1 px-3 rounded-full">${statusText}</span>
+                            </div>
+                            <p class="text-sm text-gray-400 mt-1">Market: ${signal.market}</p>
+                            
+                            <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                                <!-- Signal Type -->
+                                <div>
+                                    <p class="text-xs text-gray-500 uppercase">Signal</p>
+                                    <p class="text-xl font-semibold ${signalColor}">${signal.signal}</p>
+                                </div>
+                                <!-- Entry Price -->
+                                <div>
+                                    <p class="text-xs text-gray-500 uppercase">Entry</p>
+                                    <p class="text-xl font-semibold text-gray-200">${signal.entry}</p>
+                                </div>
+                                <!-- Stop Loss -->
+                                <div>
+                                    <p class="text-xs text-gray-500 uppercase">Stop Loss</p>
+                                    <p class="text-xl font-semibold text-red-400">${signal.sl}</p>
+                                </div>
+                                <!-- Take Profit -->
+                                <div>
+                                    <p class="text-xs text-gray-500 uppercase">Take Profit</p>
+                                    <p class="text-xl font-semibold text-blue-400">${signal.tp}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-800 border-t border-gray-700/50 px-6 py-3">
+                            <p class="text-xs text-gray-500">Posted: ${signal.posted} | Strategy: ${signal.strategy}</p>
+                        </div>
+                    </div>
+                    `;
+                    // Add the new card to the container
+                    signalContainer.innerHTML += cardHTML;
+                });
+            }
+
+            // --- 6. NEW CALCULATOR FUNCTIONALITY ---
             
-            // Duplicate the content to ensure a smooth, endless scroll
-            newsTickerContent.innerHTML = newsHTML + newsHTML;
-        }
+            /**
+             * Calculates and displays the trade results.
+             */
+            function calculateTrade() {
+                // Get and parse all values as floats
+                const entry = parseFloat(calcEntry.value);
+                const exit = parseFloat(calcExit.value);
+                const sl = parseFloat(calcSL.value);
+                const quantity = parseFloat(calcQuantity.value);
+                const feesPercent = parseFloat(calcFees.value) || 0;
 
-        // --- 5. RENDER SIGNALS FUNCTION ---
-        /**
-         * Renders a list of signal objects into the DOM.
-         * @param {Array} signalsToRender - The array of signal objects to render.
-         */
-        function renderSignals(signalsToRender) {
-            // Clear the existing signals
-            signalContainer.innerHTML = '';
+                // Simple validation
+                if (!entry || !exit || !sl || !quantity) {
+                    calcResultsContainer.innerHTML = `<p class="text-red-400 text-center">Please fill in all price and quantity fields.</p>`;
+                    return;
+                }
 
-            // If no signals, show a message
-            if (signalsToRender.length === 0) {
+                // --- Calculations ---
+                const positionValue = entry * quantity;
+                const exitValue = exit * quantity;
+                
+                // Profit / Loss
+                const grossPnl = (exit - entry) * quantity;
+                const riskAmount = (entry - sl) * quantity; // This will be negative for a long, positive for a short
+                const rewardAmount = (exit - entry) * quantity; // This will be positive for a long, negative for a short
+                
+                const isLong = exit > entry;
+                const pnlColor = grossPnl > 0 ? 'text-green-400' : 'text-red-400';
+                const rrColor = (rewardAmount / Math.abs(riskAmount)) > 1 ? 'text-green-400' : 'text-red-400';
+
+                // Risk/Reward Ratio
+                let rrRatio = 'N/A';
+                if (riskAmount !== 0) {
+                    rrRatio = (Math.abs(rewardAmount / riskAmount)).toFixed(2);
+                }
+
+                // Fees
+                const entryFee = (positionValue * feesPercent / 100) / 2;
+                const exitFee = (exitValue * feesPercent / 100) / 2;
+                const totalFees = entryFee + exitFee;
+
+                // Net Profit
+                const netPnl = grossPnl - totalFees;
+                const netPnlColor = netPnl > 0 ? 'text-green-400' : 'text-red-400';
+
+                // --- Build Result HTML ---
+                const resultsHTML = `
+                    <div class="space-y-3">
+                        <div>
+                            <p class="text-sm text-gray-400">Position Value</p>
+                            <p class="text-xl font-semibold text-white">$${positionValue.toFixed(2)}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-400">Risk/Reward Ratio</p>
+                            <p class="text-2xl font-bold ${rrColor}">${rrRatio} : 1</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-400">Potential Gross Profit/Loss</p>
+                            <p class="text-2xl font-bold ${pnlColor}">${grossPnl > 0 ? '+' : ''}${grossPnl.toFixed(2)}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-400">Service Charges (Fees)</p>
+                            <p class="text-lg font-semibold text-red-400">-${totalFees.toFixed(2)}</p>
+                        </div>
+                        <div class="pt-2 border-t border-gray-600">
+                            <p class="text-sm text-gray-400">Net Profit/Loss</p>
+                            <p class="text-3xl font-extrabold ${netPnlColor}">${netPnl > 0 ? '+' : ''}${netPnl.toFixed(2)}</p>
+                        </div>
+                    </div>
+                `;
+
+                calcResultsContainer.innerHTML = resultsHTML;
+            }
+
+
+            // --- 7. EVENT LISTENERS ---
+            
+            // NEW: Add API Key
+            const ALPHA_VANTAGE_KEY = '4EEC3S7E25Q2J61G';
+            
+            // Listen for clicks on the sidebar
+            navLinksContainer.addEventListener('click', function(e) {
+                // Find the link that was clicked
+                const clickedLink = e.target.closest('.nav-link');
+
+                // If we didn't click on a link, do nothing
+                if (!clickedLink) return;
+
+                // Stop the link from trying to navigate
+                e.preventDefault();
+
+                // --- Handle Active State ---
+                // Remove active class from all links
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('bg-gray-800', 'text-white');
+                    link.classList.add('text-gray-400');
+                });
+                // Add active class to the clicked link
+                clickedLink.classList.add('bg-gray-800', 'text-white');
+                clickedLink.classList.remove('text-gray-400');
+
+                // --- Handle View & Filter ---
+                const viewToShow = clickedLink.dataset.view;
+                
+                if (viewToShow === 'signals') {
+                    // --- Handle Filtering ---
+                    const marketToFilter = clickedLink.dataset.market;
+                    let filteredSignals;
+
+                    if (marketToFilter === 'All') {
+                        filteredSignals = mockSignals;
+                        mainHeaderTitle.textContent = 'All Signals';
+                    } else {
+                        filteredSignals = mockSignals.filter(signal => signal.market === marketToFilter);
+                        mainHeaderTitle.textContent = marketToFilter;
+                    }
+                    // Re-render the feed with the filtered signals
+                    renderSignals(filteredSignals);
+
+                    // Show signals, hide calculator
+                    viewSignals.classList.remove('hidden');
+                    viewCalculator.classList.add('hidden');
+                    return; // Added for robust switching
+                }
+                
+                // Changed from 'else if' to 'if' to be more explicit
+                if (viewToShow === 'calculator') {
+                    // Show calculator, hide signals
+                    viewCalculator.classList.remove('hidden');
+                    viewSignals.classList.add('hidden');
+                    mainHeaderTitle.textContent = 'Trade Calculator';
+                    return; // Added for robust switching
+                }
+            });
+
+            // Listen for changes on the timezone select
+            timezoneSelect.addEventListener('input', startClock);
+
+            // Listen for click on calculate button
+            calculateBtn.addEventListener('click', calculateTrade);
+
+
+            // --- 8. INITIAL RENDER & DATA FETCHING ---
+            
+            /**
+             * Fetches the live BTC/USDT price from Alpha Vantage.
+             * @returns {string | null} The formatted price string, or null on failure.
+             */
+            async function fetchCryptoPrice() {
+                const url = `https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=BTC&to_currency=USDT&apikey=${ALPHA_VANTAGE_KEY}`;
+                
+                try {
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        console.error("Alpha Vantage API request failed:", response.status);
+                        return null;
+                    }
+                    
+                    const data = await response.json();
+                    
+                    // Check for API error response
+                    if (data["Error Message"]) {
+                        console.error("Alpha Vantage API error:", data["Error Message"]);
+                        return null;
+                    }
+                    
+                    // Check for rate limit
+                    if (data["Note"] && data["Note"].includes("call frequency")) {
+                        console.warn("Alpha Vantage API rate limit likely hit.");
+                        return "Rate Limit"; // Special string to show rate limit
+                    }
+
+                    const exchangeRate = data["Realtime Currency Exchange Rate"];
+                    if (exchangeRate && exchangeRate["5. Exchange Rate"]) {
+                        const price = parseFloat(exchangeRate["5. Exchange Rate"]);
+                        // Format as a currency string without the $ symbol and decimals
+                        return price.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).replace('$', '');
+                    } else {
+                        console.error("Unexpected API response structure:", data);
+                        return null;
+                    }
+                } catch (error) {
+                    console.error("Error fetching crypto price:", error);
+                    return null;
+                }
+            }
+
+            /**
+             * Initializes the dashboard:
+             * 1. Shows a loading state.
+             * 2. Fetches live data.
+             * 3. Updates the mock data array.
+             * 4. Renders all signals.
+             * 5. Renders news and starts clock.
+             */
+            async function initializeDashboard() {
+                // 1. Show loading state
                 signalContainer.innerHTML = `<div class="bg-gray-800 rounded-2xl border border-gray-700/50 p-8 text-center">
-                    <h3 class="text-xl font-semibold text-white">No signals found</h3>
-                    <p class="text-gray-400 mt-2">There are currently no signals for this market.</p>
+                    <h3 class="text-xl font-semibold text-white">Loading Live Data...</h3>
+                    <p class="text-gray-400 mt-2">Connecting to Alpha Vantage...</p>
                 </div>`;
-                return;
-            }
 
-            // Loop through each signal and create an HTML card
-            signalsToRender.forEach(signal => {
-                // --- Dynamic Class Logic ---
-                
-                // Status Badge
-                let statusClass = '';
-                if (signal.status === 'Active') {
-                    statusClass = 'bg-green-500/10 text-green-400';
-                } else if (signal.status === 'TP Hit') {
-                    statusClass = 'bg-blue-500/10 text-blue-400';
-                } else if (signal.status === 'SL Hit') {
-                    statusClass = 'bg-red-500/10 text-red-400';
+                // 2. Fetch live data
+                const liveBtcPrice = await fetchCryptoPrice();
+
+                // 3. Update the mock data array
+                const cryptoSignal = mockSignals.find(signal => signal.pair === "BTC / USDT");
+                if (cryptoSignal) {
+                    if (liveBtcPrice === "Rate Limit") {
+                        cryptoSignal.entry = "Rate Limit";
+                        cryptoSignal.status = "Error";
+                        cryptoSignal.posted = "API Limit Hit";
+                    } else if (liveBtcPrice) {
+                        cryptoSignal.entry = liveBtcPrice;
+                        // We just update the price, the rest of the "signal" (SL/TP) remains.
+                        cryptoSignal.posted = "Just now (Live Price)";
+                    } else {
+                        // API call failed, show an error state
+                        cryptoSignal.entry = "Fetch Failed";
+                        cryptoSignal.status = "Error";
+                        cryptoSignal.posted = "API Error";
+                    }
                 }
 
-                // Signal Type (BUY/SELL)
-                let signalClass = signal.signal === 'BUY' ? 'text-green-400' : 'text-red-400';
+                // 4. Render all signals with the updated data
+                renderSignals(mockSignals);
 
-                // Opacity for closed trades
-                let cardOpacity = signal.status === 'Active' ? '' : 'opacity-70';
-
-                // Build the HTML for the card
-                const cardHTML = `
-                <div class="bg-gray-800 rounded-2xl border border-gray-700/50 shadow-lg overflow-hidden ${cardOpacity}">
-                    <div class="p-6">
-                        <div class="flex justify-between items-center">
-                            <h2 class="text-2xl font-bold text-white">${signal.pair}</h2>
-                            <span class="text-sm font-medium ${statusClass} py-1 px-3 rounded-full">${signal.status}</span>
-                        </div>
-                        <p class="text-sm text-gray-400 mt-1">Market: ${signal.market}</p>
-                        
-                        <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                            <!-- Signal Type -->
-                            <div>
-                                <p class="text-xs text-gray-500 uppercase">Signal</p>
-                                <p class="text-xl font-semibold ${signalClass}">${signal.signal}</p>
-                            </div>
-                            <!-- Entry Price -->
-                            <div>
-                                <p class="text-xs text-gray-500 uppercase">Entry</p>
-                                <p class="text-xl font-semibold text-gray-200">${signal.entry}</p>
-                            </div>
-                            <!-- Stop Loss -->
-                            <div>
-                                <p class="text-xs text-gray-500 uppercase">Stop Loss</p>
-                                <p class="text-xl font-semibold text-red-400">${signal.sl}</p>
-                            </div>
-                            <!-- Take Profit -->
-                            <div>
-                                <p class="text-xs text-gray-500 uppercase">Take Profit</p>
-                                <p class="text-xl font-semibold text-blue-400">${signal.tp}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-800 border-t border-gray-700/50 px-6 py-3">
-                        <p class="text-xs text-gray-500">Posted: ${signal.posted} ${signal.strategy ? '| Strategy: ' + signal.strategy : ''}</p>
-                    </div>
-                </div>
-                `;
-                
-                // Add the new card to the container
-                signalContainer.innerHTML += cardHTML;
-            });
-        }
-
-        // --- 6. NEW CALCULATOR FUNCTIONALITY ---
-        
-        /**
-         * Calculates and displays the trade results.
-         */
-        function calculateTrade() {
-            // Get and parse all values as floats
-            const entry = parseFloat(calcEntry.value);
-            const exit = parseFloat(calcExit.value);
-            const sl = parseFloat(calcSL.value);
-            const quantity = parseFloat(calcQuantity.value);
-            const feesPercent = parseFloat(calcFees.value) || 0;
-
-            // Simple validation
-            if (!entry || !exit || !sl || !quantity) {
-                calcResultsContainer.innerHTML = `<p class="text-red-400 text-center">Please fill in all price and quantity fields.</p>`;
-                return;
+                // 5. Render news and start clock (these are not dependent on API)
+                renderNewsTicker();
+                startClock();
             }
 
-            // --- Calculations ---
-            const positionValue = entry * quantity;
-            const exitValue = exit * quantity;
-            
-            // Profit / Loss
-            const grossPnl = (exit - entry) * quantity;
-            const riskAmount = (entry - sl) * quantity; // This will be negative for a long, positive for a short
-            const rewardAmount = (exit - entry) * quantity; // This will be positive for a long, negative for a short
-            
-            const isLong = exit > entry;
-            const pnlColor = grossPnl > 0 ? 'text-green-400' : 'text-red-400';
-            const rrColor = (rewardAmount / Math.abs(riskAmount)) > 1 ? 'text-green-400' : 'text-red-400';
-
-            // Risk/Reward Ratio
-            let rrRatio = 'N/A';
-            if (riskAmount !== 0) {
-                rrRatio = (Math.abs(rewardAmount / riskAmount)).toFixed(2);
-            }
-
-            // Fees
-            const entryFee = (positionValue * feesPercent / 100) / 2;
-            const exitFee = (exitValue * feesPercent / 100) / 2;
-            const totalFees = entryFee + exitFee;
-
-            // Net Profit
-            const netPnl = grossPnl - totalFees;
-            const netPnlColor = netPnl > 0 ? 'text-green-400' : 'text-red-400';
-
-            // --- Build Result HTML ---
-            const resultsHTML = `
-                <div class="space-y-3">
-                    <div>
-                        <p class="text-sm text-gray-400">Position Value</p>
-                        <p class="text-xl font-semibold text-white">$${positionValue.toFixed(2)}</p>
-                    </div>
-                    <div>
-                        <p class="text-sm text-gray-400">Risk/Reward Ratio</p>
-                        <p class="text-2xl font-bold ${rrColor}">${rrRatio} : 1</p>
-                    </div>
-                    <div>
-                        <p class="text-sm text-gray-400">Potential Gross Profit/Loss</p>
-                        <p class="text-2xl font-bold ${pnlColor}">${grossPnl > 0 ? '+' : ''}${grossPnl.toFixed(2)}</p>
-                    </div>
-                    <div>
-                        <p class="text-sm text-gray-400">Service Charges (Fees)</p>
-                        <p class="text-lg font-semibold text-red-400">-${totalFees.toFixed(2)}</p>
-                    </div>
-                    <div class="pt-2 border-t border-gray-600">
-                        <p class="text-sm text-gray-400">Net Profit/Loss</p>
-                        <p class="text-3xl font-extrabold ${netPnlColor}">${netPnl > 0 ? '+' : ''}${netPnl.toFixed(2)}</p>
-                    </div>
-                </div>
-            `;
-
-            calcResultsContainer.innerHTML = resultsHTML;
-        }
-
-
-        // --- 7. EVENT LISTENERS ---
+            // Start the entire dashboard initialization
+            initializeDashboard();
         
-        // Listen for clicks on the sidebar
-        navLinksContainer.addEventListener('click', function(e) {
-            // Find the link that was clicked
-            const clickedLink = e.target.closest('.nav-link');
-
-            // If we didn't click on a link, do nothing
-            if (!clickedLink) return;
-
-            // Stop the link from trying to navigate
-            e.preventDefault();
-
-            // --- Handle Active State ---
-            // Remove active class from all links
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('bg-gray-800', 'text-white');
-                link.classList.add('text-gray-400');
-            });
-            // Add active class to the clicked link
-            clickedLink.classList.add('bg-gray-800', 'text-white');
-            clickedLink.classList.remove('text-gray-400');
-
-            // --- Handle View & Filter ---
-            const viewToShow = clickedLink.dataset.view;
-            
-            if (viewToShow === 'signals') {
-                // --- Handle Filtering ---
-                const marketToFilter = clickedLink.dataset.market;
-                let filteredSignals;
-
-                if (marketToFilter === 'All') {
-                    filteredSignals = mockSignals;
-                    mainHeaderTitle.textContent = 'All Signals';
-                } else {
-                    filteredSignals = mockSignals.filter(signal => signal.market === marketToFilter);
-                    mainHeaderTitle.textContent = marketToFilter;
-                }
-                // Re-render the feed with the filtered signals
-                renderSignals(filteredSignals);
-
-                // Show signals, hide calculator
-                viewSignals.classList.remove('hidden');
-                viewCalculator.classList.add('hidden');
-                return; // Added for robust switching
-            }
-            
-            // Changed from 'else if' to 'if' to be more explicit
-            if (viewToShow === 'calculator') {
-                // Show calculator, hide signals
-                viewCalculator.classList.remove('hidden');
-                viewSignals.classList.add('hidden');
-                mainHeaderTitle.textContent = 'Trade Calculator';
-                return; // Added for robust switching
-            }
-        });
-
-        // Listen for changes on the timezone select
-        timezoneSelect.addEventListener('input', startClock);
-
-        // Listen for click on calculate button
-        calculateBtn.addEventListener('click', calculateTrade);
-
-
-        // --- 8. INITIAL RENDER ---
-        
-        // Load all signals when the page first loads
-        renderSignals(mockSignals);
-
-        // Render the news ticker
-        renderNewsTicker();
-        
-        // Start the clock
-        startClock();
-
+        }); // End of DOMContentLoaded
     </script>
 </body>
 </html>
