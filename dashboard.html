@@ -28,6 +28,39 @@
         .signal-feed::-webkit-scrollbar-thumb:hover {
             background: #6b7280; /* gray-500 */
         }
+
+        /* News Ticker CSS */
+        .news-ticker-container {
+            width: 100%;
+            overflow: hidden;
+            background: #111827; /* gray-900 */
+            border-bottom: 1px solid #374151; /* gray-700/50 */
+            padding: 8px 0;
+            white-space: nowrap;
+        }
+
+        .news-ticker-content {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 45s linear infinite;
+        }
+
+        .news-ticker-content span {
+            display: inline-block;
+            padding: 0 24px;
+            font-size: 0.875rem; /* 14px */
+            color: #d1d5db; /* gray-300 */
+        }
+
+        .news-ticker-content span strong {
+            color: #60a5fa; /* blue-400 */
+            font-weight: 600;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-gray-200 antialiased flex h-screen">
@@ -44,39 +77,45 @@
         
         <nav class="flex-grow">
             <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Markets</h3>
-            <ul class="space-y-1">
+            <!-- 
+                NOTE: 
+                - We use 'data-market' for filtering.
+                - 'nav-link' class is a new common class for JS.
+                - We set 'All Signals' to be active by default.
+            -->
+            <ul class="space-y-1" id="nav-links-container">
                 <li>
-                    <a href="#" class="flex items-center px-3 py-2 bg-gray-800 text-white rounded-lg font-medium">
+                    <a href="#" class="nav-link flex items-center px-3 py-2 bg-gray-800 text-white rounded-lg font-medium" data-market="All">
                         <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" /></svg>
                         All Signals
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="flex items-center px-3 py-2 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg font-medium transition-colors">
+                    <a href="#" class="nav-link flex items-center px-3 py-2 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg font-medium transition-colors" data-market="Indian Stocks">
                         <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 3.75l4.125 4.125L21.75 3v18H2.25z" /></svg>
                         Indian Stocks
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="flex items-center px-3 py-2 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg font-medium transition-colors">
+                    <a href="#" class="nav-link flex items-center px-3 py-2 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg font-medium transition-colors" data-market="Crypto">
                         <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         Crypto
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="flex items-center px-3 py-2 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg font-medium transition-colors">
+                    <a href="#" class="nav-link flex items-center px-3 py-2 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg font-medium transition-colors" data-market="Gold">
                         <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.419-1.946 4.375-4.375 4.375S11.5 8.794 11.5 6.375s1.946-4.375 4.375-4.375S20.25 3.956 20.25 6.375zM11.5 21v-7.875M3.75 16.125c0 2.419 1.946 4.375 4.375 4.375s4.375-1.956 4.375-4.375S10.546 11.75 8.125 11.75 3.75 13.706 3.75 16.125z" /></svg>
                         Gold
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="flex items-center px-3 py-2 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg font-medium transition-colors">
+                    <a href="#" class="nav-link flex items-center px-3 py-2 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg font-medium transition-colors" data-market="Currency">
                         <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         Currency
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="flex items-center px-3 py-2 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg font-medium transition-colors">
+                    <a href="#" class="nav-link flex items-center px-3 py-2 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg font-medium transition-colors" data-market="Crude Oil">
                         <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048l2.92-2.92a1.125 1.125 0 011.59 0l2.92 2.92c.39.39.39 1.023 0 1.414l-2.92 2.92a1.125 1.125 0 00-1.59 0l-2.92-2.92" /></svg>
                         Crude Oil
                     </a>
@@ -100,165 +139,321 @@
     <!-- Main Content Area -->
     <div class="flex-1 flex flex-col overflow-hidden">
         <!-- Main Header -->
-        <header class="bg-gray-900 border-b border-gray-700/50 p-4">
-            <h1 class="text-2xl font-bold text-white">Active Signals</h1>
+        <header class="bg-gray-900 border-b border-gray-700/50 p-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-white" id="main-header-title">All Signals</h1>
+            
+            <!-- Clock and Timezone Selector -->
+            <div class="flex items-center space-x-4">
+                <select id="timezone-select" class="bg-gray-800 border border-gray-700 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2">
+                    <option value="local">Local Time</option>
+                    <option value="UTC">UTC/GMT</option>
+                    <option value="America/New_York">New York (EST)</option>
+                    <option value="Asia/Kolkata">Kolkata (IST)</option>
+                    <option value="Europe/London">London</option>
+                </select>
+                <div id="clock" class="text-xl font-mono font-semibold text-white">
+                    00:00:00
+                </div>
+            </div>
         </header>
+
+        <!-- News Ticker -->
+        <div class="news-ticker-container">
+            <div class="news-ticker-content" id="news-ticker-content">
+                <!-- News items will be dynamically inserted here -->
+            </div>
+        </div>
 
         <!-- Signal Feed -->
         <main class="flex-1 overflow-y-auto p-4 md:p-8 signal-feed bg-gray-900/50">
-            <div class="max-w-4xl mx-auto space-y-6">
-
-                <!-- Signal Card: Crypto (Active) -->
-                <div class="bg-gray-800 rounded-2xl border border-gray-700/50 shadow-lg overflow-hidden">
-                    <div class="p-6">
-                        <div class="flex justify-between items-center">
-                            <h2 class="text-2xl font-bold text-white">BTC / USDT</h2>
-                            <span class="text-sm font-medium bg-green-500/10 text-green-400 py-1 px-3 rounded-full">Active</span>
-                        </div>
-                        <p class="text-sm text-gray-400 mt-1">Market: Crypto</p>
-                        
-                        <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                            <!-- Signal Type -->
-                            <div>
-                                <p class="text-xs text-gray-500 uppercase">Signal</p>
-                                <p class="text-xl font-semibold text-green-400">BUY</p>
-                            </div>
-                            <!-- Entry Price -->
-                            <div>
-                                <p class="text-xs text-gray-500 uppercase">Entry</p>
-                                <p class="text-xl font-semibold text-gray-200">$60,000</p>
-                            </div>
-                            <!-- Stop Loss -->
-                            <div>
-                                <p class="text-xs text-gray-500 uppercase">Stop Loss</p>
-                                <p class="text-xl font-semibold text-red-400">$58,000</p>
-                            </div>
-                            <!-- Take Profit -->
-                            <div>
-                                <p class="text-xs text-gray-500 uppercase">Take Profit</p>
-                                <p class="text-xl font-semibold text-blue-400">$65,000</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-800 border-t border-gray-700/50 px-6 py-3">
-                        <p class="text-xs text-gray-500">Posted: 2 hours ago | Strategy: TrendRider V2</p>
-                    </div>
-                </div>
-
-                <!-- Signal Card: Stocks (Active) -->
-                <div class="bg-gray-800 rounded-2xl border border-gray-700/50 shadow-lg overflow-hidden">
-                    <div class="p-6">
-                        <div class="flex justify-between items-center">
-                            <h2 class="text-2xl font-bold text-white">BANKNIFTY</h2>
-                            <span class="text-sm font-medium bg-green-500/10 text-green-400 py-1 px-3 rounded-full">Active</span>
-                        </div>
-                        <p class="text-sm text-gray-400 mt-1">Market: Indian Stocks</p>
-                        
-                        <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                            <!-- Signal Type -->
-                            <div>
-                                <p class="text-xs text-gray-500 uppercase">Signal</p>
-                                <p class="text-xl font-semibold text-red-400">SELL</p>
-                            </div>
-                            <!-- Entry Price -->
-                            <div>
-                                <p class="text-xs text-gray-500 uppercase">Entry</p>
-                                <p class="text-xl font-semibold text-gray-200">48,500</p>
-                            </div>
-                            <!-- Stop Loss -->
-                            <div>
-                                <p class="text-xs text-gray-500 uppercase">Stop Loss</p>
-                                <p class="text-xl font-semibold text-green-400">48,700</p>
-                            </div>
-                            <!-- Take Profit -->
-                            <div>
-                                <p class="text-xs text-gray-500 uppercase">Take Profit</p>
-                                <p class="text-xl font-semibold text-blue-400">48,000</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-800 border-t border-gray-700/50 px-6 py-3">
-                        <p class="text-xs text-gray-500">Posted: 45 minutes ago | Strategy: Intraday Scalp</p>
-                    </div>
-                </div>
-
-                <!-- Signal Card: Gold (Closed) -->
-                <div class="bg-gray-800 rounded-2xl border border-gray-700/50 shadow-lg overflow-hidden opacity-70">
-                    <div class="p-6">
-                        <div class="flex justify-between items-center">
-                            <h2 class="text-2xl font-bold text-white">XAU / USD (GOLD)</h2>
-                            <span class="text-sm font-medium bg-blue-500/10 text-blue-400 py-1 px-3 rounded-full">Closed (TP Hit)</span>
-                        </div>
-                        <p class="text-sm text-gray-400 mt-1">Market: Gold</p>
-                        
-                        <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                            <!-- Signal Type -->
-                            <div>
-                                <p class="text-xs text-gray-500 uppercase">Signal</p>
-                                <p class="text-xl font-semibold text-green-400">BUY</p>
-                            </div>
-                            <!-- Entry Price -->
-                            <div>
-                                <p class="text-xs text-gray-500 uppercase">Entry</p>
-                                <p class="text-xl font-semibold text-gray-200">$2300</p>
-                            </div>
-                            <!-- Stop Loss -->
-                            <div>
-                                <p class="text-xs text-gray-500 uppercase">Stop Loss</p>
-                                <p class="text-xl font-semibold text-red-400">$2290</p>
-                            </div>
-                            <!-- Take Profit -->
-                            <div>
-                                <p class="text-xs text-gray-500 uppercase">Take Profit</p>
-                                <p class="text-xl font-semibold text-blue-400">$2320</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-800 border-t border-gray-700/50 px-6 py-3">
-                        <p class="text-xs text-gray-500">Posted: 1 day ago</p>
-                    </div>
-                </div>
-
-                <!-- Signal Card: Oil (Closed) -->
-                <div class="bg-gray-800 rounded-2xl border border-gray-700/50 shadow-lg overflow-hidden opacity-70">
-                    <div class="p-6">
-                        <div class="flex justify-between items-center">
-                            <h2 class="text-2xl font-bold text-white">CRUDE OIL (WTI)</h2>
-                            <span class="text-sm font-medium bg-red-500/10 text-red-400 py-1 px-3 rounded-full">Closed (SL Hit)</span>
-                        </div>
-                        <p class="text-sm text-gray-400 mt-1">Market: Crude Oil</p>
-                        
-                        <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                            <!-- Signal Type -->
-                            <div>
-                                <p class="text-xs text-gray-500 uppercase">Signal</p>
-                                <p class="text-xl font-semibold text-red-400">SELL</p>
-                            </div>
-                            <!-- Entry Price -->
-                            <div>
-                                <p class="text-xs text-gray-500 uppercase">Entry</p>
-                                <p class="text-xl font-semibold text-gray-200">$80.00</p>
-                            </div>
-                            <!-- Stop Loss -->
-                            <div>
-                                <p class="text-xs text-gray-500 uppercase">Stop Loss</p>
-                                <p class="text-xl font-semibold text-green-400">$81.00</p>
-                            </div>
-                            <!-- Take Profit -->
-                            <div>
-                                <p class="text-xs text-gray-500 uppercase">Take Profit</p>
-                                <p class="text-xl font-semibold text-blue-400">$78.00</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-800 border-t border-gray-700/50 px-6 py-3">
-                        <p class="text-xs text-gray-500">Posted: 3 days ago</p>
-                    </div>
-                </div>
-
+            <!-- 
+                NOTE: This container is now empty.
+                JavaScript will inject the signal cards here.
+            -->
+            <div class="max-w-4xl mx-auto space-y-6" id="signal-feed-container">
+                <!-- Signal cards will be dynamically inserted here -->
             </div>
         </main>
     </div>
 
+
+    <!-- 
+    ================================================================
+    == JAVASCRIPT SECTION
+    ================================================================
+    -->
+    <script>
+        // --- 1. MOCK DATA ---
+        // In a real app, this data would come from a database or API.
+        const mockSignals = [
+            {
+                pair: "BTC / USDT",
+                market: "Crypto",
+                status: "Active", // Active, TP Hit, SL Hit
+                signal: "BUY", // BUY, SELL
+                entry: "60,000",
+                sl: "58,000",
+                tp: "65,000",
+                posted: "2 hours ago",
+                strategy: "TrendRider V2"
+            },
+            {
+                pair: "BANKNIFTY",
+                market: "Indian Stocks",
+                status: "Active",
+                signal: "SELL",
+                entry: "48,500",
+                sl: "48,700",
+                tp: "48,000",
+                posted: "45 minutes ago",
+                strategy: "Intraday Scalp"
+            },
+            {
+                pair: "XAU / USD (GOLD)",
+                market: "Gold",
+                status: "TP Hit",
+                signal: "BUY",
+                entry: "2300",
+                sl: "2290",
+                tp: "2320",
+                posted: "1 day ago",
+                strategy: "Breakout"
+            },
+            {
+                pair: "CRUDE OIL (WTI)",
+                market: "Crude Oil",
+                status: "SL Hit",
+                signal: "SELL",
+                entry: "80.00",
+                sl: "81.00",
+                tp: "78.00",
+                posted: "3 days ago",
+                strategy: "Mean Reversion"
+            },
+            {
+                pair: "EUR / USD",
+                market: "Currency",
+                status: "Active",
+                signal: "BUY",
+                entry: "1.0850",
+                sl: "1.0800",
+                tp: "1.0950",
+                posted: "5 hours ago",
+                strategy: "TrendRider V2"
+            }
+        ];
+
+        // Mock data for the news ticker
+        const mockNews = [
+            { category: "Crypto", headline: "Bitcoin tests $61,000 resistance level as market sentiment shifts." },
+            { category: "Indian Stocks", headline: "NIFTY 50 opens flat, Bank Nifty shows bearish divergence." },
+            { category: "Gold", headline: "XAU/USD rallies on weaker-than-expected US inflation data." },
+            { category: "Crude Oil", headline: "WTI Crude Oil inventories rise, putting pressure on prices." },
+            { category: "Currency", headline: "ECB holds rates steady, EUR/USD remains in tight range." }
+        ];
+
+        // --- 2. DOM ELEMENTS ---
+        const signalContainer = document.getElementById('signal-feed-container');
+        const navLinksContainer = document.getElementById('nav-links-container');
+        const mainHeaderTitle = document.getElementById('main-header-title');
+        const clockElement = document.getElementById('clock');
+        const timezoneSelect = document.getElementById('timezone-select');
+        const newsTickerContent = document.getElementById('news-ticker-content');
+        
+        let clockInterval; // To store the interval
+
+        // --- 3. CLOCK FUNCTIONALITY ---
+
+        /**
+         * Updates the clock element with the current time in the selected timezone.
+         */
+        function updateClock() {
+            const selectedTimezone = timezoneSelect.value;
+            let date = new Date();
+            let timeString;
+
+            try {
+                if (selectedTimezone === 'local') {
+                    timeString = date.toLocaleTimeString('en-GB');
+                } else {
+                    timeString = date.toLocaleTimeString('en-GB', { timeZone: selectedTimezone, hour12: false });
+                }
+                clockElement.textContent = timeString;
+            } catch (error) {
+                // Fallback for invalid timezone
+                clockElement.textContent = date.toLocaleTimeString('en-GB');
+                console.error("Invalid timezone selected:", selectedTimezone);
+            }
+        }
+
+        /**
+         * Starts the clock interval.
+         */
+        function startClock() {
+            // Clear any existing interval
+            if (clockInterval) {
+                clearInterval(clockInterval);
+            }
+            // Update the clock immediately
+            updateClock();
+            // Start a new interval to update it every second
+            clockInterval = setInterval(updateClock, 1000);
+        }
+
+        // --- 4. NEWS TICKER FUNCTIONALITY ---
+
+        /**
+         * Renders the mock news items into the scrolling ticker.
+         */
+        function renderNewsTicker() {
+            let newsHTML = '';
+            mockNews.forEach(item => {
+                newsHTML += `
+                    <span>
+                        <strong>${item.category}:</strong> ${item.headline}
+                    </span>
+                `;
+            });
+            
+            // Duplicate the content to ensure a smooth, endless scroll
+            newsTickerContent.innerHTML = newsHTML + newsHTML;
+        }
+
+        // --- 5. RENDER SIGNALS FUNCTION ---
+        /**
+         * Renders a list of signal objects into the DOM.
+         * @param {Array} signalsToRender - The array of signal objects to render.
+         */
+        function renderSignals(signalsToRender) {
+            // Clear the existing signals
+            signalContainer.innerHTML = '';
+
+            // If no signals, show a message
+            if (signalsToRender.length === 0) {
+                signalContainer.innerHTML = `<div class="bg-gray-800 rounded-2xl border border-gray-700/50 p-8 text-center">
+                    <h3 class="text-xl font-semibold text-white">No signals found</h3>
+                    <p class="text-gray-400 mt-2">There are currently no signals for this market.</p>
+                </div>`;
+                return;
+            }
+
+            // Loop through each signal and create an HTML card
+            signalsToRender.forEach(signal => {
+                // --- Dynamic Class Logic ---
+                
+                // Status Badge
+                let statusClass = '';
+                if (signal.status === 'Active') {
+                    statusClass = 'bg-green-500/10 text-green-400';
+                } else if (signal.status === 'TP Hit') {
+                    statusClass = 'bg-blue-500/10 text-blue-400';
+                } else if (signal.status === 'SL Hit') {
+                    statusClass = 'bg-red-500/10 text-red-400';
+                }
+
+                // Signal Type (BUY/SELL)
+                let signalClass = signal.signal === 'BUY' ? 'text-green-400' : 'text-red-400';
+
+                // Opacity for closed trades
+                let cardOpacity = signal.status === 'Active' ? '' : 'opacity-70';
+
+                // Build the HTML for the card
+                const cardHTML = `
+                <div class="bg-gray-800 rounded-2xl border border-gray-700/50 shadow-lg overflow-hidden ${cardOpacity}">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-2xl font-bold text-white">${signal.pair}</h2>
+                            <span class="text-sm font-medium ${statusClass} py-1 px-3 rounded-full">${signal.status}</span>
+                        </div>
+                        <p class="text-sm text-gray-400 mt-1">Market: ${signal.market}</p>
+                        
+                        <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                            <!-- Signal Type -->
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase">Signal</p>
+                                <p class="text-xl font-semibold ${signalClass}">${signal.signal}</p>
+                            </div>
+                            <!-- Entry Price -->
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase">Entry</p>
+                                <p class="text-xl font-semibold text-gray-200">${signal.entry}</p>
+                            </div>
+                            <!-- Stop Loss -->
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase">Stop Loss</p>
+                                <p class="text-xl font-semibold text-red-400">${signal.sl}</p>
+                            </div>
+                            <!-- Take Profit -->
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase">Take Profit</p>
+                                <p class="text-xl font-semibold text-blue-400">${signal.tp}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 border-t border-gray-700/50 px-6 py-3">
+                        <p class="text-xs text-gray-500">Posted: ${signal.posted} ${signal.strategy ? '| Strategy: ' + signal.strategy : ''}</p>
+                    </div>
+                </div>
+                `;
+                
+                // Add the new card to the container
+                signalContainer.innerHTML += cardHTML;
+            });
+        }
+
+        // --- 6. EVENT LISTENERS ---
+        
+        // Listen for clicks on the sidebar
+        navLinksContainer.addEventListener('click', function(e) {
+            // Find the link that was clicked
+            const clickedLink = e.target.closest('.nav-link');
+
+            // If we didn't click on a link, do nothing
+            if (!clickedLink) return;
+
+            // Stop the link from trying to navigate
+            e.preventDefault();
+
+            // --- Handle Active State ---
+            // Remove active class from all links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('bg-gray-800', 'text-white');
+                link.classList.add('text-gray-400');
+            });
+            // Add active class to the clicked link
+            clickedLink.classList.add('bg-gray-800', 'text-white');
+            clickedLink.classList.remove('text-gray-400');
+
+            // --- Handle Filtering ---
+            const marketToFilter = clickedLink.dataset.market;
+            let filteredSignals;
+
+            if (marketToFilter === 'All') {
+                filteredSignals = mockSignals;
+                mainHeaderTitle.textContent = 'All Signals';
+            } else {
+                filteredSignals = mockSignals.filter(signal => signal.market === marketToFilter);
+                mainHeaderTitle.textContent = marketToFilter;
+            }
+
+            // Re-render the feed with the filtered signals
+            renderSignals(filteredSignals);
+        });
+
+        // Listen for changes on the timezone select
+        timezoneSelect.addEventListener('input', startClock);
+
+        // --- 7. INITIAL RENDER ---
+        
+        // Load all signals when the page first loads
+        renderSignals(mockSignals);
+
+        // Render the news ticker
+        renderNewsTicker();
+        
+        // Start the clock
+        startClock();
+
+    </script>
 </body>
 </html>
