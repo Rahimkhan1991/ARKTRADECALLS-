@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARK Signals - Dashboard</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar for signal feed */
+        .signal-feed::-webkit-scrollbar {
+            width: 8px;
+        }
+        .signal-feed::-webkit-scrollbar-track {
+            background: #1f2937; /* gray-800 */
+        }
+        .signal-feed::-webkit-scrollbar-thumb {
+            background: #4b5563; /* gray-600 */
+            border-radius: 4px;
+        }
+        .signal-feed::-webkit-scrollbar-thumb:hover {
+            background: #6b7280; /* gray-500 */
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 antialiased flex h-screen">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 bg-gray-900 border-r border-gray-700/50 flex flex-col p-4">
+        <div class="flex items-center mb-8 shrink-0">
+            <!-- Logo -->
+            <svg class="h-8 w-8 text-blue-400 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 3.75l4.125 4.125L21.75 3v18H2.25zM12 12.75l-4.125 4.125M12 12.75l4.875-4.875" />
+            </svg>
+            <span class="font-bold text-xl text-white">ARKSignals</span>
+        </div>
+        
+        <nav class="flex-grow">
+            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Markets</h3>
+            <ul class="space-y-1">
+                <li>
+                    <a href="#" class="flex items-center px-3 py-2 bg-gray-800 text-white rounded-lg font-medium">
+                        <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" /></svg>
+                        All Signals
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center px-3 py-2 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg font-medium transition-colors">
+                        <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 3.75l4.125 4.125L21.75 3v18H2.25z" /></svg>
+                        Indian Stocks
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center px-3 py-2 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg font-medium transition-colors">
+                        <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        Crypto
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center px-3 py-2 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg font-medium transition-colors">
+                        <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.419-1.946 4.375-4.375 4.375S11.5 8.794 11.5 6.375s1.946-4.375 4.375-4.375S20.25 3.956 20.25 6.375zM11.5 21v-7.875M3.75 16.125c0 2.419 1.946 4.375 4.375 4.375s4.375-1.956 4.375-4.375S10.546 11.75 8.125 11.75 3.75 13.706 3.75 16.125z" /></svg>
+                        Gold
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center px-3 py-2 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg font-medium transition-colors">
+                        <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        Currency
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center px-3 py-2 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg font-medium transition-colors">
+                        <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048l2.92-2.92a1.125 1.125 0 011.59 0l2.92 2.92c.39.39.39 1.023 0 1.414l-2.92 2.92a1.125 1.125 0 00-1.59 0l-2.92-2.92" /></svg>
+                        Crude Oil
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        
+        <!-- User/Profile Section -->
+        <div class="mt-auto pt-4 border-t border-gray-700/50">
+            <a href="#" class="flex items-center p-2 rounded-lg hover:bg-gray-800 transition-colors">
+                <img class="h-8 w-8 rounded-full object-cover" src="https://placehold.co/100x100/1d4ed8/ffffff?text=R" alt="User avatar">
+                <div class="ml-3">
+                    <p class="text-sm font-medium text-white">R. Khan</p>
+                    <p class="text-xs text-gray-400">View profile</p>
+                </div>
+                <svg class="w-5 h-5 text-gray-400 ml-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m-3 0l3-3m0 0l-3-3m3 3H5" /></svg>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Main Header -->
+        <header class="bg-gray-900 border-b border-gray-700/50 p-4">
+            <h1 class="text-2xl font-bold text-white">Active Signals</h1>
+        </header>
+
+        <!-- Signal Feed -->
+        <main class="flex-1 overflow-y-auto p-4 md:p-8 signal-feed bg-gray-900/50">
+            <div class="max-w-4xl mx-auto space-y-6">
+
+                <!-- Signal Card: Crypto (Active) -->
+                <div class="bg-gray-800 rounded-2xl border border-gray-700/50 shadow-lg overflow-hidden">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-2xl font-bold text-white">BTC / USDT</h2>
+                            <span class="text-sm font-medium bg-green-500/10 text-green-400 py-1 px-3 rounded-full">Active</span>
+                        </div>
+                        <p class="text-sm text-gray-400 mt-1">Market: Crypto</p>
+                        
+                        <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                            <!-- Signal Type -->
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase">Signal</p>
+                                <p class="text-xl font-semibold text-green-400">BUY</p>
+                            </div>
+                            <!-- Entry Price -->
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase">Entry</p>
+                                <p class="text-xl font-semibold text-gray-200">$60,000</p>
+                            </div>
+                            <!-- Stop Loss -->
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase">Stop Loss</p>
+                                <p class="text-xl font-semibold text-red-400">$58,000</p>
+                            </div>
+                            <!-- Take Profit -->
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase">Take Profit</p>
+                                <p class="text-xl font-semibold text-blue-400">$65,000</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 border-t border-gray-700/50 px-6 py-3">
+                        <p class="text-xs text-gray-500">Posted: 2 hours ago | Strategy: TrendRider V2</p>
+                    </div>
+                </div>
+
+                <!-- Signal Card: Stocks (Active) -->
+                <div class="bg-gray-800 rounded-2xl border border-gray-700/50 shadow-lg overflow-hidden">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-2xl font-bold text-white">BANKNIFTY</h2>
+                            <span class="text-sm font-medium bg-green-500/10 text-green-400 py-1 px-3 rounded-full">Active</span>
+                        </div>
+                        <p class="text-sm text-gray-400 mt-1">Market: Indian Stocks</p>
+                        
+                        <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                            <!-- Signal Type -->
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase">Signal</p>
+                                <p class="text-xl font-semibold text-red-400">SELL</p>
+                            </div>
+                            <!-- Entry Price -->
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase">Entry</p>
+                                <p class="text-xl font-semibold text-gray-200">48,500</p>
+                            </div>
+                            <!-- Stop Loss -->
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase">Stop Loss</p>
+                                <p class="text-xl font-semibold text-green-400">48,700</p>
+                            </div>
+                            <!-- Take Profit -->
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase">Take Profit</p>
+                                <p class="text-xl font-semibold text-blue-400">48,000</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 border-t border-gray-700/50 px-6 py-3">
+                        <p class="text-xs text-gray-500">Posted: 45 minutes ago | Strategy: Intraday Scalp</p>
+                    </div>
+                </div>
+
+                <!-- Signal Card: Gold (Closed) -->
+                <div class="bg-gray-800 rounded-2xl border border-gray-700/50 shadow-lg overflow-hidden opacity-70">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-2xl font-bold text-white">XAU / USD (GOLD)</h2>
+                            <span class="text-sm font-medium bg-blue-500/10 text-blue-400 py-1 px-3 rounded-full">Closed (TP Hit)</span>
+                        </div>
+                        <p class="text-sm text-gray-400 mt-1">Market: Gold</p>
+                        
+                        <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                            <!-- Signal Type -->
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase">Signal</p>
+                                <p class="text-xl font-semibold text-green-400">BUY</p>
+                            </div>
+                            <!-- Entry Price -->
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase">Entry</p>
+                                <p class="text-xl font-semibold text-gray-200">$2300</p>
+                            </div>
+                            <!-- Stop Loss -->
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase">Stop Loss</p>
+                                <p class="text-xl font-semibold text-red-400">$2290</p>
+                            </div>
+                            <!-- Take Profit -->
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase">Take Profit</p>
+                                <p class="text-xl font-semibold text-blue-400">$2320</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 border-t border-gray-700/50 px-6 py-3">
+                        <p class="text-xs text-gray-500">Posted: 1 day ago</p>
+                    </div>
+                </div>
+
+                <!-- Signal Card: Oil (Closed) -->
+                <div class="bg-gray-800 rounded-2xl border border-gray-700/50 shadow-lg overflow-hidden opacity-70">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-2xl font-bold text-white">CRUDE OIL (WTI)</h2>
+                            <span class="text-sm font-medium bg-red-500/10 text-red-400 py-1 px-3 rounded-full">Closed (SL Hit)</span>
+                        </div>
+                        <p class="text-sm text-gray-400 mt-1">Market: Crude Oil</p>
+                        
+                        <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                            <!-- Signal Type -->
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase">Signal</p>
+                                <p class="text-xl font-semibold text-red-400">SELL</p>
+                            </div>
+                            <!-- Entry Price -->
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase">Entry</p>
+                                <p class="text-xl font-semibold text-gray-200">$80.00</p>
+                            </div>
+                            <!-- Stop Loss -->
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase">Stop Loss</p>
+                                <p class="text-xl font-semibold text-green-400">$81.00</p>
+                            </div>
+                            <!-- Take Profit -->
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase">Take Profit</p>
+                                <p class="text-xl font-semibold text-blue-400">$78.00</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 border-t border-gray-700/50 px-6 py-3">
+                        <p class="text-xs text-gray-500">Posted: 3 days ago</p>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>
